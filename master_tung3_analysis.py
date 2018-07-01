@@ -13,7 +13,10 @@ from wfc3tools import calwf3
 from astropy.stats import sigma_clip
 
 
+
+
 def calibrate_raws(files):
+    #Calibrates raw files (Turns off PCTECORR switch - outputs only flt files)
     for im in files:
         hdu = fits.open(im, mode='update')
         hdu[0].header['PCTECORR'] = 'OMIT'
@@ -306,7 +309,7 @@ def stacking(files):
         err_chip1[dq_chip1 != 0] = np.nan
         err_chip2[dq_chip2 != 0] = np.nan
      
-#        print(err_chip2[1703:1708,2693:2698])
+        #print(err_chip2[1703:1708,2693:2698])
     
     
     #Inputs the masked data in to the data cube
@@ -481,8 +484,8 @@ if __name__ == '__main__':
 
     #calibrate _raw.fits files
     print('-----------------------Calibrating raw files-------------------------------')
-    raw_files = glob.glob('*raw.fits')
-    calibrate_raws(raw_files)
+    #raw_files = glob.glob('*raw.fits')
+    #calibrate_raws(raw_files)
 
     #Sigma clip flt files
     print('-------------------------------Sigma clipping calibrated files-------------------------------')
