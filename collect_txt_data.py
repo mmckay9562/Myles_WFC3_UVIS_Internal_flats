@@ -9,17 +9,40 @@ import matplotlib.dates as mdates
 from astropy.table import Table, Column 
 from matplotlib.font_manager import FontProperties
 
+'''
+Author:
+Myles McKay
+
+About:
+This script plots the internal flat field median count-rate data from output text file from med_countrate.py.
+
+Requirements:
+1. Must run med_countrate.py first
+
+Parameters:
+--path:
+    The path to directory with internal flat files
+    required
+
+Output:
+1. Plot of all the filters median count-rate ratios and a function of time(Date-obs) for chip1
+2. Suplot of all the filters median count-rate ratio as a function of time sperated by Filter type(W, LP, M, N)
+3. Plot of all the filters median count-rate ratios and a function of time(Date-obs) for chip2
+4. Suplot of all the filters median count-rate ratio as a function of time sperated by Filter type(W, LP, M, N)
+
+Terminal output:
+1. Number of files for each type of filter for chip1 and chip2
+
+Calling Example: python collect_txt_data --path='/grp/hst/wfc3v/mmckay/internal_flats/calibrated_files/'
+
+'''
 
 def collect_txt_data(txt):
-    '''
-    Calling: python collect_txt_data.py --path='/grp/hst/wfc3v/mmckay/internal_flats/med_countrate/'
-
-    '''
-    
     date_list=[]
     chip1_mcr_ratio = []
     chip2_mcr_ratio = []
     filter_list = []
+    #Reading in text file data to plot
     with open(txt) as f:
         content= f.readlines(1)
         content= f.readlines(2)
@@ -29,11 +52,10 @@ def collect_txt_data(txt):
         filenames = np.loadtxt(txt,usecols=(0),dtype=str)
         date_obs = np.loadtxt(txt,usecols=(1),dtype=str)
         Filter = np.loadtxt(txt,usecols=(2),dtype=str)
+
         chip1_mcr_eps = np.loadtxt(txt,usecols=(3),dtype=float)
         chip2_mcr_eps = np.loadtxt(txt,usecols=(4),dtype=float)
-        #print(filenames,date_obs,Filter,chip1_mcr_eps,chip2_mcr_eps)
-        
-        
+
         date_list=np.append(date_list,date_obs)
         
         chip1_mcr_ratio=np.append(chip1_mcr_ratio, chip1_mcr_eps)
@@ -75,7 +97,11 @@ if __name__ == '__main__':
     path=args.path
     os.chdir(path)
 
-#LP filters
+    #Collecting data from each txt file
+    
+    #---------------------------
+    #LP filters
+    #---------------------------
     txt = 'F200LP_medratio_eps.txt'
     F200LP_cp1_mcr_data, F200LP_cp2_mcr_data, F200LP_date_list, F200LP_Filter = collect_txt_data(txt)
     F200LP_file_date = [pd.to_datetime(d,format='%Y-%m-%d') for d in F200LP_date_list]
@@ -92,7 +118,11 @@ if __name__ == '__main__':
     F600LP_cp1_mcr_data, F600LP_cp2_mcr_data, F600LP_date_list, F600LP_Filter = collect_txt_data(txt)
     F600LP_file_date = [pd.to_datetime(d,format='%Y-%m-%d') for d in F600LP_date_list]
 
-#Wide band filters    
+
+    #---------------------------
+    #Wide band filters
+    #---------------------------
+
     txt = 'F336W_medratio_eps.txt'
     F336W_cp1_mcr_data, F336W_cp2_mcr_data, F336W_date_list, F336W_Filter = collect_txt_data(txt)
     F336W_file_date = [pd.to_datetime(d,format='%Y-%m-%d') for d in F336W_date_list]
@@ -129,7 +159,9 @@ if __name__ == '__main__':
     F814W_cp1_mcr_data, F814W_cp2_mcr_data, F814W_date_list, F814W_Filter = collect_txt_data(txt)
     F814W_file_date = [pd.to_datetime(d,format='%Y-%m-%d') for d in F814W_date_list]
 
-#Medium band filters
+    #---------------------------
+    #Medium band filters
+    #---------------------------
     txt = 'F390M_medratio_eps.txt'
     F390M_cp1_mcr_data, F390M_cp2_mcr_data, F390M_date_list, F390M_Filter = collect_txt_data(txt)
     F390M_file_date = [pd.to_datetime(d,format='%Y-%m-%d') for d in F390M_date_list]
@@ -162,7 +194,9 @@ if __name__ == '__main__':
     F410M_cp1_mcr_data, F410M_cp2_mcr_data, F410M_date_list, F410M_Filter = collect_txt_data(txt)
     F410M_file_date = [pd.to_datetime(d,format='%Y-%m-%d') for d in F410M_date_list]
     
-#Narrow band filters
+    #---------------------------
+    #Narrow band filters
+    #---------------------------
     txt = 'F343N_medratio_eps.txt'
     F343N_cp1_mcr_data, F343N_cp2_mcr_data, F343N_date_list, F343N_Filter = collect_txt_data(txt)
     F343N_file_date = [pd.to_datetime(d,format='%Y-%m-%d') for d in F343N_date_list]
@@ -215,12 +249,17 @@ if __name__ == '__main__':
     F953N_cp1_mcr_data, F953N_cp2_mcr_data, F953N_date_list, F953N_Filter = collect_txt_data(txt)
     F953N_file_date = [pd.to_datetime(d,format='%Y-%m-%d') for d in F953N_date_list]
 
-#X band filters
+    #---------------------------
+    #X band filters
+    #---------------------------
+
     txt = 'F475X_medratio_eps.txt'
     F475X_cp1_mcr_data, F475X_cp2_mcr_data, F475X_date_list, F475X_Filter = collect_txt_data(txt)
     F475X_file_date = [pd.to_datetime(d,format='%Y-%m-%d') for d in F475X_date_list]
 
-#Quad filters
+    #---------------------------
+    #Quad filters
+    #---------------------------
 
     txt = 'FQ508N_medratio_eps.txt'
     FQ508N_cp1_mcr_data, FQ508N_cp2_mcr_data, FQ508N_date_list, FQ508N_Filter = collect_txt_data(txt)
